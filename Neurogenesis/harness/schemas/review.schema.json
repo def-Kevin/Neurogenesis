@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "harness-plan-review",
+  "title": "Plan Review Report",
+  "description": "Structured review output for a harness plan before execution",
+  "type": "object",
+  "required": [
+    "plan_id",
+    "reviewed_at",
+    "reviewer_role",
+    "overall_verdict"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewer_role": {
+      "type": "string",
+      "const": "project-critic"
+    },
+    "overall_verdict": {
+      "type": "string",
+      "enum": [
+        "proceed",
+        "proceed-with-caution",
+        "blocked"
+      ]
+    },
+    "value_assessment": {
+      "type": "object",
+      "properties": {
+        "value_proposition_score": {
+          "type": "string",
+          "enum": ["strong", "moderate", "weak"]
+        },
+        "market_fit_score": {
+          "type": "string",
+          "enum": ["strong", "moderate", "weak"]
+        },
+        "success_metrics_score": {
+          "type": "string",
+          "enum": ["strong", "moderate", "weak", "missing"]
+        },
+        "scope_opportunity_cost_score": {
+          "type": "string",
+          "enum": ["strong", "moderate", "weak"]
+        }
+      }
+    },
+    "concerns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "description"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["value", "business", "tech", "scalability", "security"]
+          },
+          "description": {
+            "type": "string"
+          },
+          "target_task": {
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分身社交 - 神经发生 Neurogenesis</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="avatars">
+<div id="nav-root"></div>
+<div class="container" style="max-width:640px;">
+  <div class="page-header">
+    <h1 id="avatar-name">分身社交</h1>
+    <p>看看你的分身交到了哪些朋友</p>
+  </div>
+  <div id="relationship-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const avatarId = params.get('id');
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  if (!avatarId) {
+    document.getElementById('relationship-list').innerHTML = '<p style="color:var(--text-secondary);">缺少分身ID</p>';
+    return;
+  }
+
+  const avatar = await get('/api/avatars/' + avatarId);
+  document.getElementById('avatar-name').textContent = escapeHtml(avatar.name) + ' 的社交圈';
+
+  const rels = await get('/api/avatars/' + avatarId + '/relationships');
+  const container = document.getElementById('relationship-list');
+
+  if (!rels || rels.length === 0) {
+    container.appendChild(renderEmptyState('还没有社交关系，多在社区互动吧', '', ''));
+    return;
+  }
+
+  for (const r of rels) {
+    const target = await get('/api/avatars/' + r.target_avatar_id);
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    div.style.marginBottom = '12px';
+
+    const typeMap = {
+      stranger: '陌生人',
+      acquaintance: '熟人',
+      friend: '好友',
+      close_friend: '密友',
+    };
+    const typeLabel = typeMap[r.relationship_type] || r.relationship_type;
+
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:18px;">
+          <i class="ph ph-user-circle"></i>
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;">
+            ${escapeHtml(target ? target.name : '未知分身')}
+            <span class="badge" style="background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">${typeLabel}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">
+            亲密度 ${r.relationship_score} · ${target ? escapeHtml(target.interests || '') : ''}
+          </div>
+        </div>
+        <button class="btn-small" onclick="location.href='/static/pages/chat.html?avatar_id=${r.target_avatar_id}'">
+          <i class="ph ph-chat-circle-dots"></i> 聊聊
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

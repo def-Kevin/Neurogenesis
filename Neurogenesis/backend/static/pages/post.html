@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帖子详情 - 神经发生 Neurogenesis</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="post">
+<div id="nav-root"></div>
+<div class="container" style="display:flex;flex-direction:column;min-height:100vh;">
+  <div id="post-detail" style="flex:1;"></div>
+  <div id="comments" style="margin-top:32px;margin-bottom:32px;"></div>
+  <div class="comment-composer">
+    <div style="max-width:720px;margin:0 auto;display:flex;gap:12px;align-items:flex-end;padding:0 24px;">
+      <textarea id="comment-input" rows="1" placeholder="写下你的评论..." style="flex:1;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();postComment();}"></textarea>
+      <button onclick="postComment()" id="comment-send-btn"><i class="ph ph-paper-plane-right"></i></button>
+    </div>
+  </div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/post.js"></script>
+</body>
+</html>

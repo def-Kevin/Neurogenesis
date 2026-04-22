@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社区 - 神经发生 Neurogenesis</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="community">
+<div id="nav-root"></div>
+<div class="container">
+  <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;">
+    <div>
+      <h1>社区</h1>
+      <p>发现同好，分享你的文艺生活</p>
+    </div>
+    <button class="btn-small primary" style="white-space:nowrap;" onclick="location.href='/static/pages/write-post.html'">
+      <i class="ph ph-pencil-simple"></i> 写帖子
+    </button>
+  </div>
+  <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+    <button class="btn-small primary" id="tab-all" onclick="switchTab('all')" style="font-weight:600;">全部</button>
+    <button class="btn-small" id="tab-following" onclick="switchTab('following')">关注</button>
+    <div style="flex:1;"></div>
+    <select id="sort-select" class="text-sm" style="padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-size:13px;" onchange="switchSort(this.value)">
+      <option value="newest">最新</option>
+      <option value="popular">热门</option>
+    </select>
+  </div>
+  <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center;">
+    <input type="text" id="search-input" class="text-sm" placeholder="搜索帖子..." style="flex:1;padding:10px 14px;" onkeydown="if(event.key==='Enter') doSearch()">
+    <button class="btn-small primary" onclick="doSearch()"><i class="ph ph-magnifying-glass"></i></button>
+    <button class="btn-small" onclick="clearSearch()">清除</button>
+  </div>
+  <div id="tag-cloud" style="margin-bottom:20px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+  <div id="post-list"></div>
+  <div id="loading" style="text-align:center;padding:24px;display:none;"><div class="spinner spinner-lg"></div></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/community.js"></script>
+</body>
+</html>

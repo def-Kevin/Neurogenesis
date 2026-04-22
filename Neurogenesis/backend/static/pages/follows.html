@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关注 - 神经发生 Neurogenesis</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="follows">
+<div id="nav-root"></div>
+<div class="container">
+  <div class="page-header">
+    <h1>关注</h1>
+    <p>管理你的社交关系</p>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <button class="btn-small primary" id="tab-following" onclick="switchTab('following')" style="font-weight:600;">我关注的</button>
+    <button class="btn-small" id="tab-followers" onclick="switchTab('followers')">关注我的</button>
+  </div>
+  <div id="follow-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+let currentTab = 'following';
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  switchTab('following');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-following').className = 'btn-small' + (tab === 'following' ? ' primary' : '');
+  document.getElementById('tab-following').style.fontWeight = tab === 'following' ? '600' : '';
+  document.getElementById('tab-followers').className = 'btn-small' + (tab === 'followers' ? ' primary' : '');
+  document.getElementById('tab-followers').style.fontWeight = tab === 'followers' ? '600' : '';
+  loadList();
+}
+
+async function loadList() {
+  const container = document.getElementById('follow-list');
+  container.innerHTML = '';
+  const overlay = showLoading(container, '加载中...');
+  try {
+    const user = await getMe();
+    const endpoint = currentTab === 'following'
+      ? `/api/follows/following/${user.id}`
+      : `/api/follows/followers/${user.id}`;
+    const list = await get(endpoint);
+    if (!list || list.length === 0) {
+      const msg = currentTab === 'following'
+        ? '你还没有关注任何人'
+        : '还没有人关注你';
+      container.appendChild(renderEmptyState(msg, '', ''));
+      return;
+    }
+    list.forEach(u => {
+      const div = document.createElement('div');
+      div.className = 'post-card';
+      div.style.marginBottom = '12px';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.gap = '12px';
+
+      const avatarHtml = u.avatar_url
+        ? `<img src="${escapeHtml(u.avatar_url)}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">`
+        : `<div style="width:40px;height:40px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:18px;"><i class="ph ph-user-circle"></i></div>`;
+
+      const showFollowBtn = currentTab === 'followers' && !u.is_followed_by_me;
+      const followBtnHtml = showFollowBtn
+        ? `<button class="btn-small primary" style="margin-left:auto;" onclick="followUser(${u.id}, this)">回关</button>`
+        : (currentTab === 'following'
+            ? `<button class="btn-small" style="margin-left:auto;" onclick="unfollowUser(${u.id}, this)">取消关注</button>`
+            : '');
+
+      div.innerHTML = `
+        ${avatarHtml}
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:15px;">${escapeHtml(u.nickname || u.username)}</div>
+          <div style="font-size:12px;color:var(--text-secondary);">粉丝 ${u.follower_count || 0} · 关注 ${u.following_count || 0}</div>
+        </div>
+        ${followBtnHtml}
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    showToast('加载失败', 'error');
+  } finally {
+    hideLoading(overlay);
+  }
+}
+
+async function followUser(userId, btn) {
+  try {
+    await post('/api/follows', { following_id: userId });
+    btn.textContent = '已关注';
+    btn.classList.remove('primary');
+    showToast('关注成功', 'success');
+    setTimeout(loadList, 300);
+  } catch (err) {
+    showToast(err.message || '操作失败', 'error');
+  }
+}
+
+async function unfollowUser(userId, btn) {
+  try {
+    await del(`/api/follows/${userId}`);
+    showToast('已取消关注', 'success');
+    loadList();
+  } catch (err) {
+    showToast(err.message || '操作失败', 'error');
+  }
+}
+
+init();
+</script>
+</body>
+</html>
