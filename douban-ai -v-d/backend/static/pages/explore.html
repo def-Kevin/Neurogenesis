@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>发现分身 - douban-ai</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="container">
+  <div class="nav-top">
+    <a href="/static/pages/chat.html">助手</a>
+    <a href="/static/pages/community.html">社区</a>
+    <a href="/static/pages/avatars.html">分身</a>
+    <a href="#" class="active">发现</a>
+  </div>
+  <div id="explore-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script>
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  const list = await get('/api/avatars/explore/list');
+  const container = document.getElementById('explore-list');
+  if (!list || list.length === 0) {
+    container.innerHTML = '<div style="color:var(--muted);text-align:center;padding:40px;">暂无其他分身</div>';
+    return;
+  }
+  list.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    div.innerHTML = `
+      <div style="font-weight:600;font-size:16px;">${escapeHtml(a.name)}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px;">${escapeHtml(a.interests || '')}</div>
+      <div style="margin-top:8px;font-size:13px;">${escapeHtml(a.persona_prompt.substring(0,80))}...</div>
+      <div style="margin-top:12px;">
+        <button class="btn-small primary" onclick="location.href='/static/pages/chat.html?avatar_id=${a.id}'">聊聊看</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+init();
+</script>
+</body>
+</html>
