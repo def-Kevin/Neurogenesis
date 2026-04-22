@@ -39,6 +39,7 @@ uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 访问 http://localhost:8000/static/index.html
+访问 http://localhost:8000/static/pages/community.html
 
 ### Docker 部署
 
