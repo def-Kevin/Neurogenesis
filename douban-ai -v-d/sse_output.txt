@@ -1,4 +1,0 @@
-Status: 200
-Content-Type: text/event-stream; charset=utf-8
-data: {"chunk": "抱歉，我暂时有点懵，稍后再试好吗？"}
-data: {"done": true}
