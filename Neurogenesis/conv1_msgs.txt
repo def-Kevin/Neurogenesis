@@ -1,3 +1,0 @@
-assistant: Kevin_The_Founder，晚上好！我是小dou。最近有看什么好书、电影，或者听到什么打动你的音乐吗？
-user: 最近听了justin bieber的歌
-assistant: 抱歉，我暂时有点懵，稍后再试好吗？
