@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="240" height="64" role="img" aria-label="书突">
+  <style>
+    .ink-1 { fill: #1C1917; }
+    .ink-3 { fill: #78716C; }
+    @media (prefers-color-scheme: dark) {
+      .ink-1 { fill: #F2EEE7; }
+      .ink-3 { fill: #A8A29E; }
+    }
+  </style>
+  <g>
+    <rect x="2" y="2" width="60" height="60" rx="3" fill="#C2413A"/>
+    <rect x="2" y="2" width="60" height="60" rx="3" fill="none" stroke="#8E2A24" stroke-width="1.2"/>
+    <g font-family="'LXGW WenKai','Songti SC','STSong',serif" font-weight="700" fill="#F7F5F2" text-anchor="middle" font-size="30">
+      <text x="32" y="32">书</text>
+      <text x="32" y="58">突</text>
+    </g>
+  </g>
+  <text class="ink-1" x="76" y="38" font-family="'LXGW WenKai','Songti SC','STSong',serif" font-weight="700" font-size="36" letter-spacing="10">书突</text>
+  <text class="ink-3" x="76" y="54" font-family="-apple-system,'Inter',sans-serif" font-size="9" letter-spacing="3" text-transform="uppercase">SHU · TU</text>
+</svg>

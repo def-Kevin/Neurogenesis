@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>聊天 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="chat">
+<div class="chat-layout">
+  <div class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <a href="/static/pages/chat.html">书突</a>
+      <button onclick="createConversation()" class="btn-small primary" style="padding:5px 12px;font-size:12px;">
+        <i class="ph ph-plus"></i> 新对话
+      </button>
+    </div>
+    <div class="chat-sidebar-nav">
+      <a href="/static/pages/chat.html" class="active"><i class="ph ph-chat-circle-text"></i> 助手</a>
+      <a href="/static/pages/chat.html?mode=direct"><i class="ph ph-envelope"></i> 私信</a>
+      <a href="/static/pages/community.html"><i class="ph ph-users"></i> 社区</a>
+      <a href="/static/pages/avatars.html"><i class="ph ph-user-circle"></i> 分身</a>
+      <a href="/static/pages/explore.html"><i class="ph ph-compass"></i> 发现</a>
+    </div>
+    <div class="chat-sidebar-user" id="sidebar-user"></div>
+    <div class="chat-sidebar-section-title">对话列表</div>
+    <div class="convo-list" id="convo-list"></div>
+  </div>
+  <div class="chat-main">
+    <div class="chat-mobile-nav">
+      <button onclick="toggleMobileSidebar()"><i class="ph ph-list"></i></button>
+      <div style="font-weight:600;flex:1;font-family:var(--font-display);">书突</div>
+      <button onclick="createConversation()"><i class="ph ph-plus"></i></button>
+    </div>
+    <div class="chat-header" id="chat-header">选择一个对话开始</div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-area">
+      <textarea id="msg-input" rows="1" placeholder="说点什么..." onkeydown="handleInputKeydown(event)"></textarea>
+      <button id="send-btn" onclick="sendMessage()"><i class="ph ph-paper-plane-right" id="send-btn-icon"></i></button>
+    </div>
+  </div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/chat.js"></script>
+</body>
+</html>

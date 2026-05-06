@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw 指挥中心 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.oc-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  gap: 16px;
+  align-items: start;
+}
+
+.oc-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+.oc-panel::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  background: url('../assets/chop-corner.svg') no-repeat center/contain;
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+.oc-panel-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.oc-panel-title {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-secondary);
+}
+
+.oc-panel-body {
+  padding: 12px;
+}
+
+/* Stats row */
+.editorial-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+.editorial-stats .stat-item {
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--ink-5);
+}
+.editorial-stats .stat-item .kicker { margin-bottom: var(--space-2); }
+.editorial-stats .numeral-display { margin-bottom: var(--space-2); }
+.editorial-stats .stat-sparkline { height: 28px; opacity: 0.5; }
+
+/* Avatar cards */
+.oc-avatar-card {
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.oc-avatar-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+}
+.oc-avatar-card.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: var(--shadow);
+}
+
+.oc-avatar-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.oc-avatar-mood {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.energy-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.energy-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* Config tabs */
+.oc-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 10px 12px 0;
+  border-bottom: 1px solid var(--border-light);
+  overflow-x: auto;
+}
+.oc-tabs::-webkit-scrollbar { display: none; }
+
+.oc-tab {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  position: relative;
+  bottom: -1px;
+}
+.oc-tab:hover { color: var(--text); background: var(--bg); }
+.oc-tab.active {
+  color: var(--primary);
+  background: var(--surface);
+  border-color: var(--border-light);
+  border-bottom-color: var(--surface);
+  font-weight: 600;
+}
+
+/* Config content */
+.oc-config-body {
+  padding: 20px;
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.oc-config-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.md-h1 { color: var(--primary); font-weight: 700; font-size: 13px; }
+.md-h2 { color: var(--accent); font-weight: 600; }
+.md-code { background: var(--accent-light); color: var(--accent); padding: 1px 4px; border-radius: 3px; }
+
+/* Log items */
+.oc-log-item {
+  display: flex;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  border: 1px solid var(--border-light);
+  background: var(--surface-raised);
+  animation: fadeIn 0.25s ease-out;
+}
+
+.oc-log-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.oc-log-icon.post { background: var(--primary-light); color: var(--primary); }
+.oc-log-icon.memory { background: var(--green-wash); color: var(--green); }
+.oc-log-icon.social { background: var(--amber-1); color: var(--amber-3); }
+.oc-log-icon.system { background: var(--bg); color: var(--text-secondary); }
+
+.oc-log-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+.oc-log-time { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* Heartbeat btn */
+.oc-hb-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border-ink);
+  background: transparent;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: 12px;
+  font-family: var(--font-ui);
+}
+.oc-hb-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.oc-hb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Memory counter bar */
+.oc-mem-bar {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  align-items: center;
+}
+.oc-mem-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+.oc-mem-label { font-family: var(--font-ui); font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.07em; }
+
+.oc-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.oc-empty i { font-size: 32px; display: block; margin-bottom: 8px; color: var(--text-tertiary); }
+
+.icon-btn-sm {
+  width: 26px; height: 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-tertiary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+}
+.icon-btn-sm:hover { background: var(--bg); color: var(--text-secondary); }
+.spinning { animation: spin 0.8s linear infinite; }
+
+@media (max-width: 900px) {
+  .oc-grid { grid-template-columns: 1fr; }
+  .editorial-stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body data-page="openclaw">
+<div id="nav-root"></div>
+<div class="container" style="max-width:1100px;">
+
+  <header class="masthead-dashboard">
+    <div>
+      <div class="masthead-epoch">
+        <span class="kicker" style="margin-bottom:var(--space-3);">OpenClaw · 指挥中心</span>
+      </div>
+      <h1>分身 Agent 配置</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="gw-badge" class="tag-seal">OpenClaw 网关 · 连接中…</span>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="editorial-stats">
+    <div class="stat-item">
+      <div class="kicker">活跃分身</div>
+      <div class="numeral-display" id="stat-agents">—</div>
+      <svg class="stat-sparkline" viewBox="0 0 120 28" preserveAspectRatio="none"><polyline fill="none" stroke="var(--primary)" stroke-width="1.5" points="0,24 10,20 20,22 30,18 40,14 50,16 60,10 70,12 80,8 90,6 100,4 110,2 120,0"/></svg>
+    </div>
+    <div class="stat-item">
+      <div class="kicker">记忆片段</div>
+      <div class="numeral-display" id="stat-memories">—</div>
+      <svg class="stat-sparkline" viewBox="0 0 120 28" preserveAspectRatio="none"><polyline fill="none" stroke="var(--amber-3)" stroke-width="1.5" points="0,26 10,24 20,20 30,22 40,18 50,16 60,14 70,10 80,12 90,8 100,6 110,4 120,2"/></svg>
+    </div>
+    <div class="stat-item">
+      <div class="kicker">心跳周期</div>
+      <div class="numeral-display" id="stat-interval">—</div>
+      <svg class="stat-sparkline" viewBox="0 0 120 28" preserveAspectRatio="none"><polyline fill="none" stroke="var(--primary)" stroke-width="1.5" points="0,20 10,18 20,22 30,20 40,16 50,18 60,14 70,16 80,12 90,14 100,10 110,12 120,8"/></svg>
+    </div>
+    <div class="stat-item">
+      <div class="kicker">网关地址</div>
+      <div class="numeral-display" id="stat-gw" style="font-size:var(--fs-h3);">—</div>
+      <svg class="stat-sparkline" viewBox="0 0 120 28" preserveAspectRatio="none"><polyline fill="none" stroke="var(--amber-3)" stroke-width="1.5" points="0,24 10,22 20,20 30,18 40,16 50,14 60,12 70,10 80,8 90,6 100,4 110,2 120,0"/></svg>
+    </div>
+  </div>
+
+  <div class="divider-brush" style="margin-bottom:var(--space-8);"></div>
+
+  <!-- Main grid -->
+  <div class="oc-grid">
+
+    <!-- Left: Avatar list -->
+    <div class="oc-panel">
+      <div class="oc-panel-header">
+        <span class="oc-panel-title">分身列表</span>
+        <button class="icon-btn-sm" id="refresh-btn" title="刷新">
+          <i class="ph ph-arrows-clockwise" id="refresh-icon"></i>
+        </button>
+      </div>
+      <div class="oc-panel-body" id="avatar-list">
+        <div class="skeleton" style="height:72px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:72px;"></div>
+      </div>
+    </div>
+
+    <!-- Center: Config viewer -->
+    <div class="oc-panel">
+      <div class="oc-tabs" id="config-tabs">
+        <button class="oc-tab active" data-file="SOUL.md">SOUL.md</button>
+        <button class="oc-tab" data-file="MEMORY.md">MEMORY.md</button>
+        <button class="oc-tab" data-file="HEARTBEAT.md">HEARTBEAT.md</button>
+        <button class="oc-tab" data-file="TOOLS.md">TOOLS.md</button>
+        <button class="oc-tab" data-file="IDENTITY.md">IDENTITY.md</button>
+      </div>
+      <div class="oc-config-body" id="config-viewer">
+        <div class="oc-empty">
+          <i class="ph ph-cpu"></i>
+          ← 选择一个分身以查看其 OpenClaw 配置文件
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Controls + log -->
+    <div class="oc-panel">
+      <div class="oc-panel-header">
+        <span class="oc-panel-title">自主活动</span>
+        <button class="icon-btn-sm" id="log-refresh-btn" title="刷新日志">
+          <i class="ph ph-arrows-clockwise" id="log-refresh-icon"></i>
+        </button>
+      </div>
+      <div class="oc-panel-body">
+        <div class="oc-mem-bar" id="mem-bar" style="display:none;">
+          <div>
+            <div class="oc-mem-num" id="mem-num">0</div>
+            <div class="oc-mem-label">记忆片段</div>
+          </div>
+          <div style="flex:1;padding-left:12px;border-left:1px solid var(--border);">
+            <div class="oc-mem-label">能量值</div>
+            <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--primary);" id="energy-val">—</div>
+          </div>
+        </div>
+
+        <button class="oc-hb-btn" id="hb-btn" disabled>
+          <i class="ph ph-heartbeat"></i> 触发心跳
+        </button>
+
+        <div id="activity-log">
+          <div class="oc-empty">
+            <i class="ph ph-timer"></i>
+            选择分身后显示活动日志
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+let avatars = [];
+let selectedAvatar = null;
+let configFiles = {};
+let activeTab = 'SOUL.md';
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  renderNav();
+  await Promise.all([checkGateway(), loadAvatars()]);
+}
+
+async function checkGateway() {
+  const badge = document.getElementById('gw-badge');
+  const statGw = document.getElementById('stat-gw');
+  try {
+    const res = await fetch('/health');
+    const data = await res.json();
+    if (data.status === 'ok') {
+      badge.textContent = 'OpenClaw 网关 · 已连接';
+      badge.className = 'tag-seal';
+      statGw.textContent = ':18789';
+      statGw.style.color = 'var(--primary)';
+    }
+  } catch {
+    badge.textContent = 'OpenClaw 网关 · 离线';
+    badge.className = 'tag-pill';
+    badge.style.borderColor = 'var(--seal-red)';
+    badge.style.color = 'var(--seal-red)';
+    statGw.textContent = '离线';
+    statGw.style.color = 'var(--seal-red)';
+  }
+}
+
+async function loadAvatars() {
+  try {
+    avatars = await get('/api/avatars');
+    document.getElementById('stat-agents').textContent = avatars.length;
+    if (avatars.length > 0) {
+      const avg = Math.round(avatars.reduce((s, a) => s + (a.auto_post_interval_hours || 24), 0) / avatars.length);
+      document.getElementById('stat-interval').textContent = avg + 'h';
+    }
+    renderAvatarList();
+    if (avatars.length > 0) selectAvatar(avatars[0]);
+    let total = 0;
+    for (const a of avatars) {
+      try { const m = await get(`/api/avatars/${a.id}/memories`); total += m?.length || 0; } catch {}
+    }
+    document.getElementById('stat-memories').textContent = total;
+  } catch {
+    document.getElementById('avatar-list').innerHTML = '<div class="oc-empty"><i class="ph ph-warning"></i>加载失败</div>';
+  }
+}
+
+function renderAvatarList() {
+  const el = document.getElementById('avatar-list');
+  if (!avatars.length) {
+    el.innerHTML = '<div class="oc-empty"><i class="ph ph-robot"></i>暂无分身</div>';
+    return;
+  }
+  el.innerHTML = '';
+  avatars.forEach(a => {
+    const energy = a.energy || 80;
+    const card = document.createElement('div');
+    card.className = 'oc-avatar-card' + (selectedAvatar?.id === a.id ? ' active' : '');
+    card.dataset.id = a.id;
+    card.innerHTML = `
+      ${renderPortrait(a, 'icon')}
+      <div style="flex:1;min-width:0;">
+        <div class="oc-avatar-name">${escapeHtml(a.name)}</div>
+        <div class="oc-avatar-mood">${escapeHtml(a.mood || '平静')}</div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-tertiary);margin-bottom:4px;">
+          <span style="text-transform:uppercase;letter-spacing:.05em;">能量</span><span>${energy}%</span>
+        </div>
+        <div class="energy-track"><div class="energy-fill" style="width:${energy}%"></div></div>
+      </div>
+    `;
+    card.addEventListener('click', () => selectAvatar(a));
+    el.appendChild(card);
+  });
+}
+
+async function selectAvatar(avatar) {
+  selectedAvatar = avatar;
+  document.querySelectorAll('.oc-avatar-card').forEach(c => {
+    c.classList.toggle('active', parseInt(c.dataset.id) === avatar.id);
+  });
+
+  document.getElementById('hb-btn').disabled = false;
+  document.getElementById('mem-bar').style.display = 'flex';
+  document.getElementById('energy-val').textContent = (avatar.energy || 80) + '%';
+
+  configFiles = {};
+  showConfigSkeleton();
+  try {
+    const res = await get(`/api/avatars/${avatar.id}/openclaw-config`);
+    configFiles = res.files || {};
+    renderTab(activeTab);
+  } catch {
+    document.getElementById('config-viewer').innerHTML = '<div class="oc-empty"><i class="ph ph-warning-circle"></i>配置加载失败</div>';
+  }
+
+  try {
+    const mems = await get(`/api/avatars/${avatar.id}/memories`);
+    document.getElementById('mem-num').textContent = mems?.length || 0;
+  } catch {}
+
+  loadLog(avatar);
+}
+
+function showConfigSkeleton() {
+  document.getElementById('config-viewer').innerHTML = `
+    <div class="skeleton" style="height:14px;width:55%;margin-bottom:14px;"></div>
+    <div class="skeleton" style="height:12px;width:100%;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:12px;width:80%;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:12px;width:90%;margin-bottom:20px;"></div>
+    <div class="skeleton" style="height:14px;width:45%;margin-bottom:14px;"></div>
+    <div class="skeleton" style="height:12px;width:100%;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:12px;width:70%;"></div>
+  `;
+}
+
+function renderTab(filename) {
+  activeTab = filename;
+  document.querySelectorAll('.oc-tab').forEach(b => b.classList.toggle('active', b.dataset.file === filename));
+  const content = configFiles[filename];
+  const viewer = document.getElementById('config-viewer');
+  if (!content) {
+    viewer.innerHTML = `<div class="oc-empty"><i class="ph ph-file-dashed"></i>暂无 ${escapeHtml(filename)} 配置</div>`;
+    return;
+  }
+  const html = escapeHtml(content)
+    .replace(/^(# .+)$/gm, '<span class="md-h1">$1</span>')
+    .replace(/^(## .+)$/gm, '<span class="md-h2">$1</span>')
+    .replace(/`([^`]+)`/g, '<span class="md-code">$1</span>');
+  viewer.innerHTML = `<pre class="oc-config-text">${html}</pre>`;
+}
+
+document.getElementById('config-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.oc-tab');
+  if (btn && selectedAvatar) renderTab(btn.dataset.file);
+});
+
+async function loadLog(avatar) {
+  const el = document.getElementById('activity-log');
+  el.innerHTML = `
+    <div class="skeleton" style="height:48px;margin-bottom:6px;"></div>
+    <div class="skeleton" style="height:48px;margin-bottom:6px;"></div>
+    <div class="skeleton" style="height:48px;"></div>
+  `;
+
+  try {
+    const growth = await get(`/api/avatars/${avatar.id}/growth`) || [];
+    el.innerHTML = '';
+
+    el.appendChild(makeLogItem('system', 'ph-cpu',
+      `<strong>OpenClaw Agent</strong> neurogenesis_avatar_${avatar.id} 配置已加载`, 'Session 活跃'));
+
+    if (!growth.length) {
+      el.appendChild(makeLogItem('system', 'ph-clock-countdown', '等待首次自主行为…', ''));
+      return;
+    }
+
+    const typeMap = {
+      trait_evolved:      { cls: 'memory',  icon: 'ph-sparkle',       label: '性格进化' },
+      memory_formed:      { cls: 'memory',  icon: 'ph-brain',          label: '形成记忆' },
+      post_created:       { cls: 'post',    icon: 'ph-pencil-simple',  label: '发布内容' },
+      social_interaction: { cls: 'social',  icon: 'ph-chat-circle',    label: '社交互动' },
+      mood_shift:         { cls: 'system',  icon: 'ph-smiley',         label: '心情变化' },
+    };
+
+    growth.slice(0, 20).forEach(item => {
+      const t = typeMap[item.milestone_type] || { cls: 'system', icon: 'ph-lightning', label: item.milestone_type };
+      const time = item.created_at ? new Date(item.created_at).toLocaleString('zh-CN', {
+        month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      }) : '';
+      el.appendChild(makeLogItem(t.cls, t.icon,
+        `<strong>${escapeHtml(t.label)}</strong> ${escapeHtml(item.description || '')}`, time));
+    });
+  } catch {
+    el.innerHTML = '<div class="oc-empty"><i class="ph ph-warning"></i>日志加载失败</div>';
+  }
+}
+
+function makeLogItem(cls, icon, html, time) {
+  const div = document.createElement('div');
+  div.className = 'oc-log-item';
+  div.innerHTML = `
+    <div class="oc-log-icon ${cls}"><i class="ph ${icon}"></i></div>
+    <div style="flex:1;min-width:0;">
+      <div class="oc-log-text">${html}</div>
+      ${time ? `<div class="oc-log-time">${time}</div>` : ''}
+    </div>
+  `;
+  return div;
+}
+
+document.getElementById('hb-btn').addEventListener('click', async () => {
+  if (!selectedAvatar) return;
+  const btn = document.getElementById('hb-btn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ph ph-spinner" style="animation:spin .7s linear infinite;"></i> 触发中…';
+  try {
+    await post(`/api/avatars/${selectedAvatar.id}/trigger-autonomy`, {});
+    showToast('心跳已触发，稍后刷新日志查看结果', 'success');
+    setTimeout(() => loadLog(selectedAvatar), 2000);
+  } catch {
+    showToast('触发失败', 'error');
+  }
+  btn.innerHTML = orig;
+  btn.disabled = false;
+});
+
+document.getElementById('refresh-btn').addEventListener('click', async () => {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spinning');
+  await loadAvatars();
+  icon.classList.remove('spinning');
+});
+
+document.getElementById('log-refresh-btn').addEventListener('click', async () => {
+  const icon = document.getElementById('log-refresh-icon');
+  icon.classList.add('spinning');
+  if (selectedAvatar) await loadLog(selectedAvatar);
+  icon.classList.remove('spinning');
+});
+
+init();
+</script>
+</body>
+</html>

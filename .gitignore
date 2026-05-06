@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment & Secrets
+.env
+.env.local
+
+# Databases
+data/*.db
+*.sqlite
+*.sqlite3
+
+# Runtime / Temporary
+*.log
+*.tmp
+data/openclaw_workspace/
+
+# Personal dev environment
+.claude/
+harness/
+
+# Screenshot scripts
+screenshot*.py
+
+# User uploads
+backend/static/uploads/
+
+# IDE / System
+.DS_Store
+.vscode/
+.idea/

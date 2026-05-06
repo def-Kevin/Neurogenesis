@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>写帖子 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="write-post">
+<div id="nav-root"></div>
+<div class="container" style="max-width:720px;">
+  <div class="page-header">
+    <h1>写帖子</h1>
+    <p>分享你的文艺见闻与感受</p>
+  </div>
+
+  <div class="post-card" style="max-width:640px;border:none;background:transparent;box-shadow:none;padding:0;">
+    <div style="margin-bottom:var(--space-2);">
+      <span class="kicker" id="draft-kicker">草稿 · 未保存</span>
+    </div>
+
+    <div style="margin-bottom:var(--space-5);">
+      <textarea id="post-content" rows="10" placeholder="写下你想分享的…"
+        class="input-serif"
+        style="width:100%;resize:vertical;min-height:200px;"></textarea>
+    </div>
+
+    <div style="margin-bottom:var(--space-5);">
+      <label class="byline" style="display:block;margin-bottom:var(--space-2);">配图</label>
+      <input type="file" id="post-image" accept="image/*" style="display:none;" onchange="previewImage(this)">
+      <button class="btn-small btn-ghost" onclick="document.getElementById('post-image').click()">
+        <i class="ph ph-image"></i> 选择图片
+      </button>
+      <div id="image-preview" style="margin-top:12px;display:none;">
+        <img src="" style="max-width:100%;max-height:300px;border-radius:var(--radius-sm);object-fit:cover;border:1px solid var(--border-ink);">
+        <button class="btn-text" style="margin-top:8px;font-size:13px;color:var(--seal-red);" onclick="clearImage()">
+          <i class="ph ph-trash"></i> 删除图片
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:var(--space-5);">
+      <label class="byline" style="display:block;margin-bottom:var(--space-2);">标签</label>
+      <input type="text" id="post-tags" class="input-ui" style="width:100%;" placeholder="电影, 音乐, 读书">
+      <p style="font-size:12px;color:var(--text-tertiary);margin-top:6px;">用逗号分隔，建议 1–3 个</p>
+    </div>
+
+    <div class="divider-hairline" style="margin:var(--space-6) 0;"></div>
+
+    <div style="display:flex;gap:12px;align-items:center;">
+      <button class="btn-small btn-seal" onclick="submitPost()">
+        <i class="ph ph-paper-plane-right"></i> 发布
+      </button>
+      <button class="btn-small btn-ghost" onclick="location.href='/static/pages/community.html'">取消</button>
+    </div>
+  </div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+let uploadedImageUrl = null;
+const contentArea = document.getElementById('post-content');
+const kicker = document.getElementById('draft-kicker');
+
+contentArea.addEventListener('input', () => {
+  const len = contentArea.value.trim().length;
+  if (len === 0) {
+    kicker.textContent = '草稿 · 未保存';
+  } else {
+    kicker.textContent = '草稿 · ' + len + ' 字';
+  }
+});
+
+function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = document.getElementById('image-preview');
+    preview.querySelector('img').src = e.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  document.getElementById('post-image').value = '';
+  document.getElementById('image-preview').style.display = 'none';
+  uploadedImageUrl = null;
+}
+
+async function submitPost() {
+  const content = document.getElementById('post-content').value.trim();
+  if (!content) {
+    showToast('请填写内容', 'error');
+    return;
+  }
+
+  const fileInput = document.getElementById('post-image');
+  if (fileInput.files[0] && !uploadedImageUrl) {
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    try {
+      const res = await fetch('/api/posts/upload-image', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || '上传失败');
+      uploadedImageUrl = data.image_url;
+    } catch (err) {
+      showToast('图片上传失败：' + err.message, 'error');
+      return;
+    }
+  }
+
+  const tagsStr = document.getElementById('post-tags').value.trim();
+  const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+
+  try {
+    await post('/api/posts', {
+      content,
+      tags,
+      image_url: uploadedImageUrl,
+    });
+    showToast('发布成功', 'success');
+    location.href = '/static/pages/community.html';
+  } catch (err) {
+    showToast('发布失败：' + err.message, 'error');
+  }
+}
+</script>
+</body>
+</html>

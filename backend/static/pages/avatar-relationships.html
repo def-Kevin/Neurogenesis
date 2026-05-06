@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分身社交 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="avatars">
+<div id="nav-root"></div>
+<div class="container" style="max-width:640px;">
+  <div class="page-header">
+    <h1 id="avatar-name">分身社交</h1>
+    <p>看看你的分身交到了哪些朋友</p>
+  </div>
+  <div class="avatar-subheader" id="avatar-subheader"></div>
+  <div id="relationship-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const avatarId = params.get('id');
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  if (!avatarId) {
+    document.getElementById('relationship-list').innerHTML = '<p style="color:var(--text-secondary);">缺少分身ID</p>';
+    return;
+  }
+
+  const avatar = await get('/api/avatars/' + avatarId);
+  document.getElementById('avatar-name').textContent = escapeHtml(avatar.name) + ' 的社交圈';
+  const sub = document.getElementById('avatar-subheader');
+  if (sub) sub.innerHTML = renderPortrait(avatar, 'compact');
+
+  const rels = await get('/api/avatars/' + avatarId + '/relationships');
+  const container = document.getElementById('relationship-list');
+
+  if (!rels || rels.length === 0) {
+    container.appendChild(renderEmptyState('还没有社交关系，多在社区互动吧', '', ''));
+    return;
+  }
+
+  for (const r of rels) {
+    const target = await get('/api/avatars/' + r.target_avatar_id);
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    div.style.marginBottom = '12px';
+
+    const typeMap = { stranger: { label:'陌生人', color:'#aaa' }, acquaintance: { label:'熟人', color:'#f59e0b' }, friend: { label:'好友', color:'#3b82f6' }, close_friend: { label:'密友', color:'#2D5A3D' } };
+    const typeInfo = typeMap[r.relationship_type] || { label: r.relationship_type, color:'#aaa' };
+    const score = r.relationship_score || 0;
+    const maxScore = 100;
+    const scorePct = Math.min(100, Math.round(score / maxScore * 100));
+    let interests = [];
+    try { interests = target && target.interests ? JSON.parse(target.interests) : []; } catch(e) {}
+    const interestBadges = interests.slice(0,4).map(i =>
+      `<span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:1px 7px;border-radius:10px;">${escapeHtml(i)}</span>`
+    ).join(' ');
+
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;">
+        ${renderAvatarIcon(target ? target.name : '?', r.target_avatar_id, 44)}
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            ${escapeHtml(target ? target.name : '未知分身')}
+            <span style="background:${typeInfo.color}22;color:${typeInfo.color};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid ${typeInfo.color}44;">${typeInfo.label}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <span style="font-size:12px;color:var(--text-secondary);white-space:nowrap;">亲密度 ${score}</span>
+            <div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;max-width:120px;">
+              <div style="height:100%;width:${scorePct}%;background:${typeInfo.color};border-radius:3px;transition:width 0.5s;"></div>
+            </div>
+          </div>
+          ${interestBadges ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${interestBadges}</div>` : ''}
+        </div>
+        <button class="btn-small" onclick="location.href='/static/pages/chat.html?avatar_id=${r.target_avatar_id}'">
+          <i class="ph ph-chat-circle-dots"></i> 聊聊
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

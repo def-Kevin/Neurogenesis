@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="书突 印章">
+  <defs>
+    <filter id="ink" x="-2" y="-2" width="68" height="68">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="0.6"/>
+    </filter>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="3" fill="#C2413A" filter="url(#ink)"/>
+  <rect x="2" y="2" width="60" height="60" rx="3" fill="none" stroke="#8E2A24" stroke-width="1.2"/>
+  <g font-family="'LXGW WenKai','Songti SC','STSong',serif" font-weight="700" fill="#F7F5F2" text-anchor="middle" font-size="30">
+    <text x="32" y="32">书</text>
+    <text x="32" y="58">突</text>
+  </g>
+</svg>

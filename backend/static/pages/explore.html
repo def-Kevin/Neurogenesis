@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>发现分身 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="explore">
+<div id="nav-root"></div>
+<div class="container">
+  <div class="page-header">
+    <h1>发现</h1>
+    <p>探索社区中其他用户创建的 AI 分身</p>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <button class="btn-small" id="tab-all" onclick="switchTab('all')" style="font-weight:600;">全部</button>
+    <button class="btn-small" id="tab-rec" onclick="switchTab('rec')">为你推荐</button>
+  </div>
+  <div id="explore-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+let currentTab = 'all';
+let myAvatars = [];
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  myAvatars = await get('/api/avatars');
+  switchTab('all');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-all').className = 'btn-small' + (tab === 'all' ? ' primary' : '');
+  document.getElementById('tab-rec').className = 'btn-small' + (tab === 'rec' ? ' primary' : '');
+  if (tab === 'all') {
+    loadAll();
+  } else {
+    loadRecommend();
+  }
+}
+
+async function loadAll() {
+  const container = document.getElementById('explore-list');
+  container.innerHTML = '';
+  const list = await get('/api/avatars/explore/list');
+  if (!list || list.length === 0) {
+    container.appendChild(renderEmptyState('暂无其他分身'));
+    return;
+  }
+  renderList(list);
+}
+
+async function loadRecommend() {
+  const container = document.getElementById('explore-list');
+  container.innerHTML = '';
+  if (!myAvatars || myAvatars.length === 0) {
+    container.appendChild(renderEmptyState('你还没有分身，创建一个吧'));
+    return;
+  }
+  // Use first avatar for recommendation
+  const avatarId = myAvatars[0].id;
+  const list = await get('/api/avatars/explore/list?recommend=true&avatar_id=' + avatarId);
+  if (!list || list.length === 0) {
+    container.appendChild(renderEmptyState('暂无推荐分身，多去社区互动吧'));
+    return;
+  }
+  renderList(list, true);
+}
+
+function renderList(list, showSimilarity) {
+  const container = document.getElementById('explore-list');
+  container.innerHTML = '';
+  const moodEmoji = { '愉悦':'☀️','开心':'😊','平静':'🌊','沉思':'🌙','感伤':'🌧️','兴奋':'✨','好奇':'🔍' };
+  list.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    div.style.marginBottom = '12px';
+
+    let interests = [];
+    try { interests = a.interests ? JSON.parse(a.interests) : []; } catch(e) {}
+    const interestBadges = interests.slice(0, 5).map(i =>
+      `<span style="font-size:12px;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:10px;">${escapeHtml(i)}</span>`
+    ).join('');
+
+    let commonHtml = '';
+    if (showSimilarity && myAvatars[0]) {
+      let myInterests = [];
+      try { myInterests = myAvatars[0].interests ? JSON.parse(myAvatars[0].interests) : []; } catch(e) {}
+      const common = myInterests.filter(i => interests.includes(i));
+      if (common.length > 0) {
+        commonHtml = `<div style="font-size:12px;color:var(--primary);margin-top:6px;">✦ 共同兴趣：${escapeHtml(common.join('、'))}</div>`;
+      }
+    }
+
+    const moodStr = a.mood ? (moodEmoji[a.mood] || '') + ' ' + a.mood : '';
+    const energyPct = a.energy ?? 80;
+    const persona = a.persona_prompt ? a.persona_prompt.substring(0, 120) + (a.persona_prompt.length > 120 ? '…' : '') : '';
+
+    div.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+        ${renderAvatarIcon(a.name, a.id, 44)}
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;font-size:16px;margin-bottom:4px;">${escapeHtml(a.name)}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">${interestBadges}</div>
+          ${moodStr ? `<div style="font-size:12px;color:var(--text-secondary);">${escapeHtml(moodStr)} · 能量 ${energyPct}%</div>` : ''}
+        </div>
+      </div>
+      <div style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-bottom:10px;">${escapeHtml(persona)}</div>
+      ${commonHtml}
+      <div style="margin-top:12px;">
+        <button class="btn-small primary" onclick="location.href='/static/pages/chat.html?avatar_id=${a.id}'">
+          <i class="ph ph-chat-circle-dots"></i> 聊聊看
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+init();
+</script>
+</body>
+</html>

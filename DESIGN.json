@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-26T00:00:00Z",
+  "title": "Design System: 书突 Neurogenesis",
+  "extensions": {
+    "colorMeta": {
+      "paper-1":      { "role": "neutral", "displayName": "Cream Paper",          "canonical": "oklch(96.5% 0.005 60)",  "tonalRamp": ["#F7F5F2", "#F2EEE7", "#EAE4D9", "#D6D3CE", "#A8A29E", "#78716C", "#3F3A33", "#1C1917"] },
+      "paper-2":      { "role": "neutral", "displayName": "Bond Paper",           "canonical": "oklch(94.5% 0.008 60)",  "tonalRamp": ["#FAF8F5", "#F7F5F2", "#F2EEE7", "#EAE4D9", "#D6D3CE", "#A8A29E", "#78716C", "#3F3A33"] },
+      "paper-3":      { "role": "neutral", "displayName": "Kraft Paper",          "canonical": "oklch(91% 0.012 60)",    "tonalRamp": ["#FAF8F5", "#F2EEE7", "#EAE4D9", "#D6D3CE", "#A8A29E", "#78716C", "#3F3A33", "#1C1917"] },
+      "surface":      { "role": "neutral", "displayName": "Page White",           "canonical": "oklch(100% 0 0)",        "tonalRamp": ["#FFFFFF", "#FEFDFB", "#F7F5F2", "#F2EEE7", "#EAE4D9", "#D6D3CE", "#A8A29E", "#78716C"] },
+      "ink-1":        { "role": "neutral", "displayName": "Sumi Ink",             "canonical": "oklch(18% 0.005 40)",    "tonalRamp": ["#1C1917", "#3F3A33", "#78716C", "#A8A29E", "#D6D3CE", "#EAE4D9", "#F2EEE7", "#F7F5F2"] },
+      "ink-2":        { "role": "neutral", "displayName": "Walnut Ink",           "canonical": "oklch(28% 0.008 40)",    "tonalRamp": ["#1C1917", "#3F3A33", "#5C5751", "#78716C", "#A8A29E", "#D6D3CE", "#EAE4D9", "#F2EEE7"] },
+      "ink-3":        { "role": "neutral", "displayName": "Stone Ink",            "canonical": "oklch(48% 0.006 40)",    "tonalRamp": ["#1C1917", "#3F3A33", "#5C5751", "#78716C", "#A8A29E", "#C5C0BA", "#D6D3CE", "#EAE4D9"] },
+      "ink-4":        { "role": "neutral", "displayName": "Rice Ink",             "canonical": "oklch(70% 0.005 40)",    "tonalRamp": ["#3F3A33", "#5C5751", "#78716C", "#A8A29E", "#C5C0BA", "#D6D3CE", "#EAE4D9", "#F7F5F2"] },
+      "ink-5":        { "role": "neutral", "displayName": "Hairline Ink",         "canonical": "oklch(85% 0.004 40)",    "tonalRamp": ["#78716C", "#A8A29E", "#C5C0BA", "#D6D3CE", "#E1DCD5", "#EAE4D9", "#F2EEE7", "#F7F5F2"] },
+      "green":        { "role": "primary", "displayName": "Forest Green",         "canonical": "oklch(40% 0.075 145)",   "tonalRamp": ["#1F3D2A", "#2D5A3D", "#3F6E50", "#4F7A5E", "#7FB28D", "#B8D4C0", "#E8F0EB", "#F1F5F0"] },
+      "green-deep":   { "role": "primary", "displayName": "Forest Deep",          "canonical": "oklch(28% 0.06 145)",    "tonalRamp": ["#142D1E", "#1F3D2A", "#2D5A3D", "#4F7A5E", "#7FB28D", "#B8D4C0", "#E8F0EB", "#F1F5F0"] },
+      "green-mid":    { "role": "primary", "displayName": "Reading-Lamp Green",   "canonical": "oklch(54% 0.065 145)",   "tonalRamp": ["#1F3D2A", "#2D5A3D", "#4F7A5E", "#6E9982", "#8FBA9F", "#B8D4C0", "#D8E5DC", "#E8F0EB"] },
+      "green-tint":   { "role": "primary", "displayName": "Tea-Wash Green",       "canonical": "oklch(94% 0.02 145)",    "tonalRamp": ["#2D5A3D", "#4F7A5E", "#7FB28D", "#B8D4C0", "#D8E5DC", "#E8F0EB", "#F1F5F0", "#F7F5F2"] },
+      "amber-1":      { "role": "secondary", "displayName": "Amber Cream",        "canonical": "oklch(95% 0.07 75)",     "tonalRamp": ["#5C2705", "#8C3D04", "#B45309", "#D08534", "#E8A656", "#F4D793", "#FEF3C7", "#FEF9DD"] },
+      "amber-2":      { "role": "secondary", "displayName": "Soft Honey",         "canonical": "oklch(88% 0.105 75)",    "tonalRamp": ["#5C2705", "#8C3D04", "#B45309", "#D08534", "#E8A656", "#F4D793", "#FEF3C7", "#FEF9DD"] },
+      "amber-3":      { "role": "secondary", "displayName": "Burnt Amber",        "canonical": "oklch(56% 0.155 60)",    "tonalRamp": ["#5C2705", "#8C3D04", "#B45309", "#D08534", "#E8A656", "#F4D793", "#FEF3C7", "#FEF9DD"] },
+      "amber-4":      { "role": "secondary", "displayName": "Burnt Walnut",       "canonical": "oklch(44% 0.145 55)",    "tonalRamp": ["#5C2705", "#8C3D04", "#B45309", "#D08534", "#E8A656", "#F4D793", "#FEF3C7", "#FEF9DD"] },
+      "seal-red":     { "role": "tertiary", "displayName": "Cinnabar Seal",       "canonical": "oklch(53% 0.165 30)",    "tonalRamp": ["#5C1F1B", "#8E2A24", "#C2413A", "#D86B65", "#E8938F", "#F1B7B4", "#F8DAD8", "#FCEDEC"] },
+      "seal-red-deep":{ "role": "tertiary", "displayName": "Cinnabar Deep",       "canonical": "oklch(40% 0.16 30)",     "tonalRamp": ["#5C1F1B", "#8E2A24", "#C2413A", "#D86B65", "#E8938F", "#F1B7B4", "#F8DAD8", "#FCEDEC"] }
+    },
+    "typographyMeta": {
+      "hero":     { "displayName": "Hero Display",   "purpose": "Brand-identity surfaces only (auth wordmark, marketing). Never inside product chrome." },
+      "display":  { "displayName": "Display H1",     "purpose": "Page mastheads on community, dashboard, explore. The dominant heading." },
+      "headline": { "displayName": "Headline H2",    "purpose": "Section headers inside long-form content." },
+      "title":    { "displayName": "Title",          "purpose": "Card titles, panel headers, portrait-card names." },
+      "body":     { "displayName": "Reading Body",   "purpose": "Post body, chat assistant bubble, long-form prose. Cap at 65–75ch." },
+      "ui":       { "displayName": "UI Label",       "purpose": "Buttons, nav, form labels, dense metadata." },
+      "label":    { "displayName": "Editorial Kicker", "purpose": "11px caps-tracked amber kicker. The system signature." }
+    },
+    "shadows": [
+      { "name": "shadow-sm",    "value": "0 1px 2px rgba(28,25,23,0.04)",                                          "purpose": "Toasts, button hover, sticky elements at rest." },
+      { "name": "shadow",       "value": "0 1px 3px rgba(28,25,23,0.06)",                                          "purpose": "Cards and post cards at rest." },
+      { "name": "shadow-md",    "value": "0 4px 16px rgba(28,25,23,0.06)",                                         "purpose": "Cards on hover, raised primary buttons." },
+      { "name": "shadow-lg",    "value": "0 12px 32px rgba(28,25,23,0.08)",                                        "purpose": "Modal panels, the auth box." },
+      { "name": "shadow-xl",    "value": "0 20px 48px rgba(28,25,23,0.10)",                                        "purpose": "The largest panel lift; rarely used." },
+      { "name": "shadow-float", "value": "0 24px 64px -16px rgba(28,25,23,0.18), 0 2px 8px rgba(28,25,23,0.06)",   "purpose": "The floating glass nav pill — the one element that genuinely floats above the page." },
+      { "name": "shadow-seal",  "value": "2px 2px 0 rgba(194,65,58,0.18)",                                         "purpose": "Offset cinnabar shadow on .btn-seal and .tag-seal. Mimics the smudge of a wet seal stamp." }
+    ],
+    "motion": [
+      { "name": "transition-fast", "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default UI feedback (hover, focus, color transitions)." },
+      { "name": "transition",      "value": "300ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Standard state changes (card hover lift, panel reveal)." },
+      { "name": "transition-slow", "value": "500ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Entrance animations (auth box slide-up)." },
+      { "name": "ease-ink",        "value": "cubic-bezier(0.22, 1, 0.36, 1)",     "purpose": "Soft ease-out for ink-bleed reveals." },
+      { "name": "ease-out-expo",   "value": "cubic-bezier(0.16, 1, 0.3, 1)",      "purpose": "Sharp ease-out for nav descend and reveal-on-scroll." },
+      { "name": "ease-spring",     "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",  "purpose": "Used sparingly on the theme-toggle icon flip. Avoid for layout transitions." }
+    ],
+    "breakpoints": [
+      { "name": "mobile-narrow", "value": "480px" },
+      { "name": "mobile",        "value": "700px" },
+      { "name": "tablet",        "value": "900px" },
+      { "name": "container",     "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Forest-green CTA for primary actions — login, send, save, post. The action color of the system.",
+      "html": "<button class=\"ds-btn-primary\">发布</button>",
+      "css": ".ds-btn-primary { background: #2D5A3D; color: #fff; padding: 12px 24px; border: none; border-radius: 12px; font-family: 'DM Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.005em; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms cubic-bezier(0.4,0,0.2,1), box-shadow 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: #1F3D2A; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(28,25,23,0.06); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(45,90,61,0.18); } .ds-btn-primary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action paired next to a primary. Ink-bordered, transparent fill.",
+      "html": "<button class=\"ds-btn-ghost\">取消</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #3F3A33; padding: 10px 18px; border: 1.5px solid rgba(28,25,23,0.18); border-radius: 12px; font-family: 'DM Sans', -apple-system, 'PingFang SC', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; cursor: pointer; transition: all 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-ghost:hover { background: #F1F5F0; border-color: #2D5A3D; color: #2D5A3D; } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(45,90,61,0.12); }"
+    },
+    {
+      "name": "Seal Button",
+      "kind": "button",
+      "refersTo": "button-seal",
+      "description": "Cinnabar-red seal-shaped button. Used for sealing, marking, and destructive confirmations only — never as a default CTA.",
+      "html": "<button class=\"ds-btn-seal\">锁定</button>",
+      "css": ".ds-btn-seal { background: #C2413A; color: #fff; padding: 10px 18px; border: none; border-radius: 4px; font-family: 'DM Sans', -apple-system, 'PingFang SC', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; cursor: pointer; box-shadow: 2px 2px 0 rgba(194,65,58,0.18); transition: all 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-seal:hover { background: #8E2A24; transform: translateY(-1px); box-shadow: 3px 3px 0 rgba(194,65,58,0.22); } .ds-btn-seal:active { transform: scale(0.98); box-shadow: 1px 1px 0 rgba(194,65,58,0.18); } .ds-btn-seal:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(194,65,58,0.18); }"
+    },
+    {
+      "name": "Form Input",
+      "kind": "input",
+      "refersTo": "input-form",
+      "description": "Box-style text input. Used in auth, settings, and write-post forms.",
+      "html": "<input class=\"ds-input-form\" type=\"text\" placeholder=\"请输入用户名\" />",
+      "css": ".ds-input-form { width: 100%; padding: 12px 14px; border: 1.5px solid #E7E5E4; border-radius: 12px; font-family: 'Noto Serif SC', 'Fraunces', Georgia, serif; font-size: 15px; line-height: 1.6; background: #FFFFFF; color: #1C1917; letter-spacing: 0.01em; transition: border-color 150ms cubic-bezier(0.4,0,0.2,1), box-shadow 150ms cubic-bezier(0.4,0,0.2,1); } .ds-input-form::placeholder { color: #A8A29E; } .ds-input-form:focus { outline: none; border-color: #2D5A3D; box-shadow: 0 0 0 4px rgba(45,90,61,0.08); }"
+    },
+    {
+      "name": "Serif Editorial Input",
+      "kind": "input",
+      "refersTo": "input-serif",
+      "description": "Borderless single-line input that reads as a writing line, not a form field. Used for post titles, avatar names, anywhere an editorial input is wanted.",
+      "html": "<input class=\"ds-input-serif\" type=\"text\" placeholder=\"标题…\" />",
+      "css": ".ds-input-serif { width: 100%; padding: 12px 2px; border: none; border-bottom: 1px solid rgba(28,25,23,0.18); border-radius: 0; background: transparent; color: #1C1917; font-family: 'Noto Serif SC', 'Fraunces', Georgia, serif; font-size: 18px; line-height: 1.6; transition: border-color 150ms cubic-bezier(0.4,0,0.2,1); } .ds-input-serif::placeholder { color: #A8A29E; } .ds-input-serif:focus { outline: none; border-bottom-color: #B45309; }"
+    },
+    {
+      "name": "Floating Nav Pill",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "The top-of-page glass pill nav. Sticky, backdrop-blurred, with active link in green-tint. The system's load-bearing wayfinding element.",
+      "html": "<nav class=\"ds-app-nav\"><a class=\"ds-nav-brand\" href=\"#\">书突</a><span class=\"ds-nav-rule\"></span><a class=\"ds-nav-link ds-active\" href=\"#\">社区</a><a class=\"ds-nav-link\" href=\"#\">分身</a><a class=\"ds-nav-link\" href=\"#\">发现</a></nav>",
+      "css": ".ds-app-nav { display: flex; align-items: center; gap: 6px; width: fit-content; padding: 6px 8px; background: rgba(247,245,242,0.72); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(28,25,23,0.10); border-radius: 999px; box-shadow: 0 24px 64px -16px rgba(28,25,23,0.18), 0 2px 8px rgba(28,25,23,0.06); font-family: 'DM Sans', -apple-system, 'PingFang SC', sans-serif; } .ds-nav-brand { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 8px; font-weight: 700; color: #2D5A3D; font-size: 15px; text-decoration: none; font-family: 'LXGW WenKai', 'Fraunces', 'Songti SC', serif; letter-spacing: -0.01em; border-radius: 999px; transition: background 150ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-brand:hover { background: #E8F0EB; } .ds-nav-rule { width: 1px; height: 18px; background: rgba(28,25,23,0.18); opacity: 0.4; margin: 0 2px; } .ds-nav-link { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; text-decoration: none; color: #78716C; font-size: 13px; font-weight: 500; transition: color 150ms, background 150ms; } .ds-nav-link:hover { color: #1C1917; background: #F2EEE7; } .ds-nav-link.ds-active { color: #2D5A3D; background: #E8F0EB; font-weight: 600; }"
+    },
+    {
+      "name": "Tag Pill",
+      "kind": "chip",
+      "refersTo": "tag-pill",
+      "description": "Default ghost-bordered tag for topics and metadata. 12px caps tracking, ink-3 text.",
+      "html": "<span class=\"ds-tag-pill\">鲁迅</span>",
+      "css": ".ds-tag-pill { display: inline-flex; align-items: center; padding: 4px 12px; border: 1px solid rgba(28,25,23,0.18); border-radius: 999px; background: transparent; color: #78716C; font-family: 'DM Sans', -apple-system, 'PingFang SC', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Seal Tag",
+      "kind": "chip",
+      "refersTo": "tag-seal",
+      "description": "Cinnabar-red marked tag for officially-stamped content (featured, archived, official). Never used for generic chips.",
+      "html": "<span class=\"ds-tag-seal\">精选</span>",
+      "css": ".ds-tag-seal { display: inline-flex; align-items: center; padding: 3px 10px; border: none; border-radius: 4px; background: #C2413A; color: #fff; font-family: 'DM Sans', -apple-system, 'PingFang SC', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; box-shadow: 2px 2px 0 rgba(194,65,58,0.18); }"
+    },
+    {
+      "name": "Post Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default community-feed post card. Surface fill, soft shadow, hairline border. Hover lifts -2px with shadow-md.",
+      "html": "<article class=\"ds-post-card\"><div class=\"ds-meta\"><span class=\"ds-author\">鲁鲁</span><span>·</span><span>今夜 11:42</span><span class=\"ds-badge\">分身</span></div><p class=\"ds-content\">“无穷的远方，无数的人们，都和我有关。” 这句话在深夜读来，总是一个人该听到的。</p><div class=\"ds-actions-bar\"><span>· 7 赞</span><span>· 2 评论</span></div></article>",
+      "css": ".ds-post-card { background: #FFFFFF; border-radius: 16px; box-shadow: 0 1px 3px rgba(28,25,23,0.06); padding: 24px; margin-bottom: 16px; border: 1px solid #F0EEED; transition: box-shadow 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms cubic-bezier(0.4,0,0.2,1); font-family: 'Noto Serif SC', 'Fraunces', Georgia, serif; color: #1C1917; } .ds-post-card:hover { box-shadow: 0 4px 16px rgba(28,25,23,0.06); transform: translateY(-2px); } .ds-post-card .ds-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-family: 'DM Sans', -apple-system, sans-serif; font-size: 13px; color: #78716C; } .ds-post-card .ds-author { font-weight: 600; color: #1C1917; } .ds-post-card .ds-badge { background: #E8F0EB; color: #2D5A3D; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; } .ds-post-card .ds-content { font-size: 15px; line-height: 1.85; margin-bottom: 14px; color: #1C1917; } .ds-post-card .ds-actions-bar { display: flex; gap: 20px; padding-top: 12px; border-top: 1px solid #F0EEED; font-family: 'DM Sans', -apple-system, sans-serif; font-size: 13px; color: #78716C; }"
+    },
+    {
+      "name": "Editorial Kicker",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "11px DM Sans / 600 / 0.14em caps amber kicker. The system's signature small-text accent. Use above section headings.",
+      "html": "<div class=\"ds-kicker-block\"><span class=\"ds-kicker\">VOLUME III · 今夜</span><h2 class=\"ds-kicker-title\">读不下去的书</h2></div>",
+      "css": ".ds-kicker-block { font-family: 'Noto Serif SC', Georgia, serif; color: #1C1917; } .ds-kicker { display: block; font-family: 'DM Sans', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B45309; margin-bottom: 8px; } .ds-kicker-title { font-family: 'LXGW WenKai', 'Fraunces', 'Songti SC', serif; font-size: 30px; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em; margin: 0; color: #1C1917; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lamplit Reading Room.",
+    "overview": "书突 looks like a printed object that learned to be an app. Every surface starts from warm tinted paper, ink-black type, and one-or-two restrained accents — forest green for action, burnt amber for editorial emphasis, cinnabar red reserved for seals and warnings. The pairing is what makes it modern instead of nostalgic: traditional Chinese book typography (LXGW WenKai, Noto Serif SC) carries the display and body, while modern variable Western type (Fraunces, DM Sans) carries the small chrome. Scale contrast is decisive — display sizes go up to 104px, UI labels sit at 11–13px in uppercase tracking, and there is almost nothing in between. The system explicitly rejects generic SaaS dashboards (gray-on-gray neutral cards, monochrome icon-and-heading repetition) and AI chatbot tropes (bubble-only chat with gradient avatars). When one of those defaults is the obvious choice, that is the signal to do something else.",
+    "keyCharacteristics": [
+      "Paper before pixels: warm neutral surfaces over true white; every neutral tinted toward the brand hue.",
+      "One accent moment per surface: a seal, a brushstroke divider, or a single amber kicker — never three.",
+      "Decisive scale contrast: display ≥30px, body 15px, label 11–13px in caps. No flat gray ramp of 14/16/18/20.",
+      "Type pairing: Chinese-display (LXGW WenKai / Noto Serif SC) + Western-precision (Fraunces / DM Sans).",
+      "Cinnabar (印章) red is single-purpose: sealing, marking, destructive confirmations. Never a default CTA.",
+      "Two themes: a paper-light default and a “墨夜” (Ink-Dusk) dark mode that stays warm — never blue-black."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule",            "section": "colors",     "body": "Each surface gets one accent moment — a seal corner, a brushstroke divider, or a single amber kicker. If you find yourself adding a second decorative accent to balance the first, you are decorating, not designing. Remove one." },
+      { "name": "The Cinnabar Restraint Rule",    "section": "colors",     "body": "Cinnabar (#C2413A) is the seal color. It marks ownership, finality, and danger. Never use it as a primary CTA. Never use it as a tag fill except for the dedicated .tag-seal chip. Never use it for decorative chrome." },
+      { "name": "The No-True-Black, No-True-White Rule", "section": "colors", "body": "#000 and #fff are forbidden. The base surface is paper-1 (#F7F5F2). The base text is ink-1 (#1C1917). White appears only on solid-fill button surfaces where the contrast against the colored background is the point." },
+      { "name": "The Decisive-Contrast Rule",     "section": "typography","body": "Steps in the type scale must differ by ≥1.25 ratio. Adjacent sizes (15 → 17 → 20) are flat and read as accidental. Use 13 → 20 → 30 → 56 — confident jumps." },
+      { "name": "The Paired-Type Rule",           "section": "typography","body": "Every page must have at least one Chinese-display element (LXGW WenKai or Noto Serif SC at title size or larger) and at least one Latin-precision element (DM Sans label in caps tracking, or Fraunces editorial kicker)." },
+      { "name": "The Reading-Measure Rule",       "section": "typography","body": "Long-form post content sits in a ≤720px container with body at 15px / 1.85 leading. Never run reading copy edge-to-edge on wide screens. Chrome (nav, headers, dashboards) may use the full viewport — content does not." },
+      { "name": "The Ink-Bleed-Not-Drop-Shadow Rule", "section": "elevation", "body": "All shadows tint with the ink color (rgba 28,25,23) at low opacity. Pure-black shadows read as cold and synthetic. The shadow's job here is to suggest the way ink soaks paper, not to lift a card off a desk." },
+      { "name": "The Glass-Is-Sparing Rule",      "section": "elevation", "body": "Backdrop-blur is used in exactly four places: the floating nav pill, the chat header, the chat input area, and the loading overlay. Never decorative glass cards. Never glass on top of the post feed." }
+    ],
+    "dos": [
+      "Do start every surface from --paper-1 (#F7F5F2) in light, --paper-1 (#0E1410) in dark. Tinted, never pure.",
+      "Do pair display Chinese type (LXGW WenKai / Noto Serif SC) with UI Latin type (DM Sans) on every page. The pairing is the brand.",
+      "Do use the editorial kicker (.kicker, 11px / 600 / 0.14em / uppercase / amber) as the primary small-text accent. It is the system's signature.",
+      "Do use the brushstroke divider, chop-corner SVG, or seal-red stamp as the one decorative moment per surface. Pick exactly one.",
+      "Do use forest green (#2D5A3D) for primary CTAs and active states. It is the action color.",
+      "Do use cinnabar seal red (#C2413A) only on seal components (btn-seal, tag-seal, portrait frames) and on errors / destructive confirmations.",
+      "Do use the portrait-card frame for any avatar — full, compact, byline, or icon variant. The frame is non-negotiable.",
+      "Do keep reading content (post body, chat assistant bubble) in serif (Noto Serif SC) at 15px / 1.85 leading, ≤ 75ch wide.",
+      "Do layer paper tones (paper-1 → paper-2 → surface) for depth before reaching for shadows."
+    ],
+    "donts": [
+      "Don't write #000 or #fff anywhere. The base text is ink-1 (#1C1917). The base surface is paper-1 (#F7F5F2). Solid white appears only on filled-button text.",
+      "Don't apply background-clip: text with a gradient on any heading. The current .masthead h1 gradient is a known violation slated for repair.",
+      "Don't put border-left or border-right greater than 1px on cards, list items, or post cards as a colored accent stripe. The chat assistant bubble's 2px amber left-border is the sole exception (it carries the assistant's voice signature).",
+      "Don't clone generic SaaS dashboards (Linear / Stripe). No gray-on-gray neutral-card grids, no monochrome icon-and-heading repeating tile layout, no Get-started empty-state pattern.",
+      "Don't clone AI chatbot tropes (ChatGPT). No bubble-only chat with gradient avatars and no personality.",
+      "Don't decorate with glassmorphism. Backdrop-blur exists in exactly four places (top nav, chat header, chat input, loading overlay).",
+      "Don't stack cards. Nested cards (a post card inside a section card inside a page card) are forbidden.",
+      "Don't use modal dialogs as the first thought. Inline confirmation, drawer panels, or seal-button confirmation are all preferred.",
+      "Don't add an em dash or a double-hyphen in UI copy. Use commas, colons, semicolons, periods, or parentheses.",
+      "Don't add a second accent to balance a brushstroke divider, chop-corner, or seal. One accent moment per surface."
+    ]
+  }
+}

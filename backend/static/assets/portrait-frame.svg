@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="portrait frame">
+  <g fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.78">
+    <rect x="3" y="3" width="74" height="74" rx="2"/>
+    <path d="M 3 18 L 12 18 M 3 12 L 12 12 M 18 3 L 18 12 M 12 3 L 12 12"/>
+    <path d="M 77 18 L 68 18 M 77 12 L 68 12 M 62 3 L 62 12 M 68 3 L 68 12"/>
+    <path d="M 3 62 L 12 62 M 3 68 L 12 68 M 18 77 L 18 68 M 12 77 L 12 68"/>
+    <path d="M 77 62 L 68 62 M 77 68 L 68 68 M 62 77 L 62 68 M 68 77 L 68 68"/>
+  </g>
+</svg>

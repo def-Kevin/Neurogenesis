@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 24" width="600" height="24" preserveAspectRatio="none" role="img" aria-label="brushstroke divider">
+  <path d="M 6 13
+           C 60 9, 140 16, 220 11
+           C 300 7, 380 17, 460 12
+           C 520 9, 560 14, 594 12"
+        fill="none"
+        stroke="#1C1917"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        opacity="0.82"/>
+  <path d="M 6 13
+           C 60 9, 140 16, 220 11
+           C 300 7, 380 17, 460 12
+           C 520 9, 560 14, 594 12"
+        fill="none"
+        stroke="#1C1917"
+        stroke-width="0.9"
+        stroke-linecap="round"
+        opacity="0.4"
+        stroke-dasharray="2 6"
+        transform="translate(0,1.5)"/>
+</svg>

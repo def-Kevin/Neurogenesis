@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分身协作 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="avatar-collab">
+<div id="nav-root"></div>
+<div class="container">
+  <div class="page-header">
+    <h1 id="avatar-name">分身协作</h1>
+    <p>子分身任务 + A2A 跨分身消息</p>
+  </div>
+  <div class="avatar-subheader" id="avatar-subheader"></div>
+
+  <h3 style="font-size:16px;margin:24px 0 12px;">子分身任务</h3>
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <input type="text" id="sub-name" class="form-input" placeholder="子分身名称" style="flex:1;">
+    <input type="text" id="sub-task" class="form-input" placeholder="任务描述" style="flex:2;">
+    <button class="btn-small primary" onclick="spawnSubagent()">创建</button>
+  </div>
+  <div id="subagent-list"></div>
+
+  <h3 style="font-size:16px;margin:24px 0 12px;">A2A 消息</h3>
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <select id="receiver-id" class="form-input" style="flex:1;">
+      <option value="">选择接收分身</option>
+    </select>
+    <input type="text" id="a2a-content" class="form-input" placeholder="消息内容" style="flex:2;">
+    <button class="btn-small primary" onclick="sendA2A()">发送</button>
+  </div>
+  <div id="a2a-list"></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+const urlParams = new URLSearchParams(location.search);
+const avatarId = urlParams.get('id');
+
+async function init() {
+  const user = await getMe();
+  if (!user) return;
+  if (!avatarId) {
+    location.href = '/static/pages/avatars.html';
+    return;
+  }
+  loadAvatarInfo();
+  loadSubagents();
+  loadA2AMessages();
+  loadReceivers();
+}
+
+async function loadAvatarInfo() {
+  const avatar = await get('/api/avatars/' + avatarId);
+  if (avatar) {
+    document.getElementById('avatar-name').textContent = avatar.name + ' 的协作空间';
+    const sub = document.getElementById('avatar-subheader');
+    if (sub) sub.innerHTML = renderPortrait(avatar, 'compact');
+  }
+}
+
+async function loadSubagents() {
+  const container = document.getElementById('subagent-list');
+  container.innerHTML = '';
+  const list = await get('/api/avatars/' + avatarId + '/subagents');
+  if (!list || list.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary);">暂无子分身任务</p>';
+    return;
+  }
+  list.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    const statusColor = s.status === 'completed' ? 'var(--primary)' : (s.status === 'running' ? '#f5a623' : '#999');
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-weight:600;font-size:15px;">${escapeHtml(s.name)}</span>
+        <span style="font-size:12px;color:${statusColor};font-weight:600;">${s.status}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">任务：${escapeHtml(s.task || '')}</div>
+      ${s.result ? `<div style="font-size:13px;background:var(--bg);padding:8px;border-radius:8px;">${escapeHtml(s.result)}</div>` : ''}
+    `;
+    container.appendChild(div);
+  });
+}
+
+async function spawnSubagent() {
+  const name = document.getElementById('sub-name').value.trim();
+  const task = document.getElementById('sub-task').value.trim();
+  if (!name || !task) return;
+  await post('/api/avatars/' + avatarId + '/subagents', { name, task });
+  document.getElementById('sub-name').value = '';
+  document.getElementById('sub-task').value = '';
+  loadSubagents();
+}
+
+async function loadReceivers() {
+  const select = document.getElementById('receiver-id');
+  const all = await get('/api/avatars/explore/list');
+  all.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = a.name;
+    select.appendChild(opt);
+  });
+}
+
+async function sendA2A() {
+  const receiverId = document.getElementById('receiver-id').value;
+  const content = document.getElementById('a2a-content').value.trim();
+  if (!receiverId || !content) return;
+  await post('/api/avatars/' + avatarId + '/messages', { receiver_avatar_id: parseInt(receiverId), content });
+  document.getElementById('a2a-content').value = '';
+  loadA2AMessages();
+}
+
+async function loadA2AMessages() {
+  const container = document.getElementById('a2a-list');
+  container.innerHTML = '';
+  const msgs = await get('/api/avatars/' + avatarId + '/messages');
+  if (!msgs || msgs.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary);">暂无消息</p>';
+    return;
+  }
+  msgs.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    const isSender = m.sender_avatar_id == avatarId;
+    div.style.borderLeft = `3px solid ${isSender ? 'var(--primary)' : '#ccc'}`;
+    div.innerHTML = `
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">
+        ${isSender ? '我发送给 分身' + m.receiver_avatar_id : '分身' + m.sender_avatar_id + ' 发送给我'}
+      </div>
+      <div style="font-size:14px;">${escapeHtml(m.content)}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "neurogenesis-openclaw",
+  "version": "1.0.0",
+  "description": "Neurogenesis with OpenClaw integration",
+  "private": true,
+  "dependencies": {
+    "openclaw": "^2026.4.22",
+    "@larksuite/openclaw-lark": "^2026.4.8",
+    "@tencent-weixin/openclaw-weixin": "^2.1.9"
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社区 - 书突 Neurogenesis</title>
+<script>(function(){try{var t=localStorage.getItem("ng-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="community">
+<div id="nav-root"></div>
+<div class="container">
+  <header class="masthead">
+    <div class="masthead-epoch">
+      <span class="masthead-lunar"></span>
+    </div>
+    <h1>社区</h1>
+    <div class="divider-brush"></div>
+  </header>
+
+  <nav class="index-row">
+    <div class="index-links">
+      <a href="#" class="index-link active" id="link-all" onclick="switchTab('all');return false;">全部</a>
+      <span class="index-dot">·</span>
+      <a href="#" class="index-link" id="link-following" onclick="switchTab('following');return false;">关注</a>
+      <span class="index-dot">·</span>
+      <a href="/static/pages/write-post.html" class="index-link">写帖子 →</a>
+    </div>
+    <div class="index-tools">
+      <select id="sort-select" onchange="switchSort(this.value)">
+        <option value="newest">最新</option>
+        <option value="popular">热门</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索帖子或作者…" onkeydown="if(event.key==='Enter') doSearch()">
+      <button class="btn-text" onclick="doSearch()"><i class="ph ph-magnifying-glass"></i></button>
+      <button class="btn-text" onclick="clearSearch()">清除</button>
+    </div>
+  </nav>
+
+  <div id="first-run-hint"></div>
+  <div id="tag-cloud" class="tag-cloud-row"></div>
+  <div id="active-filter-bar" class="active-filter-bar" hidden></div>
+  <div id="post-list"></div>
+  <div id="loading" style="text-align:center;padding:24px;display:none;"><div class="spinner spinner-lg"></div></div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/community.js"></script>
+</body>
+</html>
